@@ -18,4 +18,4 @@ curl "http://192.168.33.130:8983/solr/db/debug/dump?param=ContentStreams" -F "st
 
 
 
-![image-20210318001430696](https://gitee.com/svenbeast/NotePicture/raw/master/img/2021/03/18/85647_image-20210318001430696.png)
+![image-20210318145728513](https://gitee.com/svenbeast/NotePicture/raw/master/img/2021/03/18/37216_image-20210318145728513.png)
